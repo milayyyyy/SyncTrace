@@ -86,7 +86,7 @@ export default function DashboardPage() {
     if (user?.role === "FACULTY_ADVISER") router.replace("/adviser/dashboard");
   }, [isAuthenticated, user, router]);
 
-  const activeGaps = wsGaps.filter((g) => !g.isResolved).sort((a, b) => {
+  const activeGaps = (wsGaps ?? []).filter((g) => !g.isResolved).sort((a, b) => {
     const order: Record<string, number> = { CRITICAL: 0, WARNING: 1, INFO: 2 };
     return order[a.severity] - order[b.severity];
   });
