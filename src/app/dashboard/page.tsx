@@ -28,9 +28,12 @@ import {
 } from "@/components/shared/status-badge";
 import {
   MOCK_AUDITS_MAP,
+  MOCK_AUDIT,
   MOCK_GAPS_MAP,
+  MOCK_GAPS,
   MOCK_WORKSPACES,
   ARTIFACT_PAIRS_MAP,
+  ARTIFACT_PAIRS,
 } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/layout/page-header";
@@ -64,9 +67,9 @@ export default function DashboardPage() {
     (wsParam ? MOCK_WORKSPACES.find((w) => w.id === wsParam) : workspace) ??
     MOCK_WORKSPACES[0];
   const workspaceId = currentWs.id;
-  const wsAudit = MOCK_AUDITS_MAP[workspaceId] ?? MOCK_AUDITS_MAP["ws-1"];
-  const wsGaps = MOCK_GAPS_MAP[workspaceId] ?? MOCK_GAPS_MAP["ws-1"];
-  const wsPairs = ARTIFACT_PAIRS_MAP[workspaceId] ?? ARTIFACT_PAIRS_MAP["ws-1"];
+  const wsAudit = MOCK_AUDITS_MAP[workspaceId] ?? MOCK_AUDITS_MAP["ws-1"] ?? MOCK_AUDIT;
+  const wsGaps = MOCK_GAPS_MAP[workspaceId] ?? MOCK_GAPS_MAP["ws-1"] ?? MOCK_GAPS;
+  const wsPairs = ARTIFACT_PAIRS_MAP[workspaceId] ?? ARTIFACT_PAIRS_MAP["ws-1"] ?? ARTIFACT_PAIRS;
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
