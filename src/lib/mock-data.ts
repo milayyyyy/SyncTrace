@@ -1,6 +1,7 @@
 import type {
   Adviser,
   Artifact,
+  ArtifactType,
   AuditResult,
   ContinuityGap,
   GroupSummary,
@@ -367,7 +368,7 @@ export const ARTIFACT_LABELS: Record<string, string> = {
   SOURCE_CODE: "GitHub Repository",
 };
 
-export const ARTIFACT_URLS_MAP: Record<string, Record<string, string>> = {
+export const ARTIFACT_URLS_MAP: Record<string, Record<ArtifactType, string>> = {
   "ws-1": {
     PROPOSAL: "https://docs.google.com/document/d/synctrace-proposal",
     SRS: "https://docs.google.com/document/d/synctrace-srs",

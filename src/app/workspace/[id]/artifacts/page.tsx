@@ -34,7 +34,7 @@ export default function ArtifactSubmissionPage() {
   const { isAuthenticated } = useAuthStore();
   const { setWorkspace } = useWorkspaceStore();
 
-  const defaultUrls = (ARTIFACT_URLS_MAP[workspaceId] ?? ARTIFACT_URLS_MAP["ws-1"]) as Record<ArtifactType, string>;
+  const defaultUrls = ARTIFACT_URLS_MAP[workspaceId] ?? ARTIFACT_URLS_MAP["ws-1"];
   const currentWs = MOCK_WORKSPACES.find((w) => w.id === workspaceId) ?? MOCK_WORKSPACES[0];
 
   const [urls, setUrls] = useState<Record<ArtifactType, string>>(defaultUrls);
@@ -67,7 +67,9 @@ export default function ArtifactSubmissionPage() {
   useEffect(() => {
     if (!isAuthenticated) router.replace("/");
     if (artifacts?.length) {
-      const populated = { ...(ARTIFACT_URLS_MAP[workspaceId] ?? ARTIFACT_URLS_MAP["ws-1"]) };
+      const populated: Record<ArtifactType, string> = {
+        ...(ARTIFACT_URLS_MAP[workspaceId] ?? ARTIFACT_URLS_MAP["ws-1"]),
+      };
       artifacts.forEach((a) => {
         populated[a.type] = a.url;
       });
