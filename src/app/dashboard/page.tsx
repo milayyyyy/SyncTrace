@@ -1,8 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -58,7 +56,7 @@ function gapCardClass(severity: string) {
   return "border border-l-4 border-l-slate-300 bg-muted/20";
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuthStore();
   const { workspace, setWorkspace } = useWorkspaceStore();
@@ -447,5 +445,12 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
+  );
+}
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardContent />
+    </Suspense>
   );
 }

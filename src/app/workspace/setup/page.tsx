@@ -1,8 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +27,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function WorkspaceSetupPage() {
+function WorkspaceSetupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated, user } = useAuthStore();
@@ -175,5 +173,13 @@ export default function WorkspaceSetupPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function WorkspaceSetupPage() {
+  return (
+    <Suspense fallback={null}>
+      <WorkspaceSetupContent />
+    </Suspense>
   );
 }
