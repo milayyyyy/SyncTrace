@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Users } from "lucide-react";
@@ -11,7 +10,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { ReadinessBadge } from "@/components/shared/status-badge";
-import { formatDate, getScoreColor, cn } from "@/lib/utils";
+import { getScoreColor, cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 
 export default function FacultyOversightDashboard() {
@@ -58,10 +57,12 @@ export default function FacultyOversightDashboard() {
       </div>
 
       {isLoading ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse h-40" />
-          ))}
+        <div className="rounded-lg border overflow-hidden">
+          <div className="animate-pulse divide-y">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-16 bg-muted/40" />
+            ))}
+          </div>
         </div>
       ) : filtered.length === 0 ? (
         <Card className="border-dashed">
@@ -74,36 +75,50 @@ export default function FacultyOversightDashboard() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((group) => (
-            <Link key={group.workspaceId} href={`/adviser/groups/${group.workspaceId}`}>
-              <Card className="h-full hover:shadow-md hover:border-brand-navy/20 transition-all cursor-pointer">
-                <CardContent className="pt-6 space-y-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <p className="text-xs font-mono text-brand-slate">{group.teamCode}</p>
-                      <p className="font-semibold text-brand-navy mt-1 line-clamp-2">{group.title}</p>
-                    </div>
-                    <ReadinessBadge status={group.readinessStatus} />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-xs text-brand-slate mb-1">
-                      <span>Health Score</span>
-                      <span className={cn("font-bold", getScoreColor(group.overallAlignmentScore))}>
+        <div className="rounded-lg border overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-muted text-brand-slate text-left border-b">
+                <th className="px-4 py-3 font-medium">Student Group</th>
+                <th className="px-4 py-3 font-medium">Health Score</th>
+                <th className="px-4 py-3 font-medium">Unresolved Issues</th>
+                <th className="px-4 py-3 font-medium">Readiness Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((group) => (
+                <tr
+                  key={group.workspaceId}
+                  className="border-b last:border-0 hover:bg-muted/40 cursor-pointer transition-colors"
+                  onClick={() => router.push(`/adviser/groups/${group.workspaceId}`)}
+                >
+                  <td className="px-4 py-3">
+                    <p className="font-mono text-xs text-brand-slate">{group.teamCode}</p>
+                    <p className="font-semibold text-brand-navy mt-0.5">{group.title}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <Progress value={group.overallAlignmentScore} className="w-20 h-2" />
+                      <span className={cn("font-bold text-xs tabular-nums", getScoreColor(group.overallAlignmentScore))}>
                         {group.overallAlignmentScore.toFixed(1)}%
                       </span>
                     </div>
-                    <Progress value={group.overallAlignmentScore} className="h-2" />
-                  </div>
-                  <div className="flex justify-between text-xs text-brand-slate">
-                    <span>{group.totalCriticalGaps} critical gaps</span>
-                    <span>Last audit: {formatDate(group.lastAuditAt)}</span>
-                  </div>
-                  <p className="text-sm text-brand-navy font-medium">View Report →</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={cn("font-bold", group.totalCriticalGaps > 0 ? "text-status-fail" : "text-status-pass")}>
+                      {group.totalCriticalGaps}
+                    </span>
+                    <span className="text-brand-slate ml-1 text-xs">
+                      {group.totalCriticalGaps === 1 ? "critical gap" : "critical gaps"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <ReadinessBadge status={group.readinessStatus} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

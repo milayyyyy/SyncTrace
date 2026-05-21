@@ -101,7 +101,7 @@ export function AppShell({ children }: Readonly<{ children: React.ReactNode }>) 
   ];
 
   const adviserNav: NavItem[] = [
-    { href: "/adviser/dashboard", label: "My Groups", icon: Users },
+    { href: "/adviser/dashboard", label: "Groups", icon: Users },
   ];
 
   const navItems = isAdviser ? adviserNav : studentNav;
@@ -218,7 +218,7 @@ export function AppShell({ children }: Readonly<{ children: React.ReactNode }>) 
         >
           <X className="h-5 w-5" />
         </Button>
-        {sidebarContent}
+        {mobileOpen && sidebarContent}
       </aside>
 
       <div className="flex flex-1 flex-col lg:pl-64">

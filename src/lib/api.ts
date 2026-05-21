@@ -14,10 +14,13 @@ import type {
 } from "@/types";
 import {
   ARTIFACT_PAIRS,
+  ARTIFACT_PAIRS_MAP,
   MOCK_ADVISERS,
   MOCK_ARTIFACTS,
   MOCK_AUDIT,
+  MOCK_AUDITS_MAP,
   MOCK_GAPS,
+  MOCK_GAPS_MAP,
   MOCK_GROUPS,
   MOCK_RECOMMENDATIONS,
   MOCK_TRACEABILITY_LINKS,
@@ -260,16 +263,21 @@ export const adviserApi = {
     gaps: ContinuityGap[];
     links: TraceabilityLink[];
     recommendations: Recommendation[];
+    pairs: TraceabilityPair[];
   }> => {
     if (USE_MOCK) {
       await delay(500);
       const group = MOCK_GROUPS.find((g) => g.workspaceId === workspaceId) ?? MOCK_GROUPS[0];
+      const audit = MOCK_AUDITS_MAP[workspaceId] ?? MOCK_AUDIT;
+      const gaps = MOCK_GAPS_MAP[workspaceId] ?? MOCK_GAPS;
+      const pairs = ARTIFACT_PAIRS_MAP[workspaceId] ?? ARTIFACT_PAIRS;
       return {
         group,
-        audit: MOCK_AUDIT,
-        gaps: MOCK_GAPS,
+        audit,
+        gaps,
         links: MOCK_TRACEABILITY_LINKS,
         recommendations: MOCK_RECOMMENDATIONS,
+        pairs,
       };
     }
     const { data } = await api.get(`/adviser/groups/${workspaceId}`);
